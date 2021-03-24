@@ -1,3 +1,5 @@
+import 'package:user_crud/app/modules/home/bindings/home_bindings.dart';
+import 'package:user_crud/app/modules/home/views/home_page.dart';
 import 'package:user_crud/app/modules/login/bindings/login_binding.dart';
 import 'package:user_crud/app/modules/login/views/login_page.dart';
 import 'package:user_crud/app/modules/singup/bindings/signup_binding.dart';
@@ -9,11 +11,11 @@ class AppPages {
   static const INITIAL = Routes.LOGIN;
 
   static final routes = [
-    /* GetPage(
+    GetPage(
       name: Routes.HOME,
       page: () => HomePage(),
       binding: HomeBinding(),
-    ),*/
+    ),
     GetPage(
       name: Routes.LOGIN,
       page: () => LoginPage(),

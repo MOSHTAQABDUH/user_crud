@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:user_crud/app/global/widgets/renew_hash.dart';
 import 'package:user_crud/app/modules/login/controllers/login_controller.dart';
 
 class SignUpPage extends StatelessWidget {
@@ -32,6 +33,16 @@ class SignUpPage extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Colors.white,
+      floatingActionButton: FloatingActionButton.extended(
+          onPressed: () {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return RenewHash();
+                });
+          },
+          label: Text("Hash"),
+          icon: Icon(Icons.playlist_add)),
       body: Container(
         child: Form(
           key: _formKey,

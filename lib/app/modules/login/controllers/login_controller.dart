@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:user_crud/app/data/model/user_model.dart';
+import 'package:user_crud/app/data/repository/user_repository.dart';
+import 'package:user_crud/app/routes/routes/app_routes.dart';
 
 class LoginController extends GetxController {
   final TextEditingController emailTextController = TextEditingController();
@@ -11,13 +14,10 @@ class LoginController extends GetxController {
   DateTime date = DateTime.now();
   final data = GetStorage();
 
-  void login() {}
-  void register() {}
-  /* final LoginRepository repository = LoginRepository();
-  final ProfileRepository profileRepository = ProfileRepository();
+  final UserRepository repository = UserRepository();
 
   void register() async {
-    User user = await repository.signUp(User(
+    UserModel user = await repository.createUser(UserModel(
         birthDate: date,
         email: emailTextController.text,
         password: passwordTextController.text,
@@ -29,22 +29,19 @@ class LoginController extends GetxController {
     } else {
       Get.defaultDialog(title: 'Ops..', content: Text('Email já cadastrado'));
     }
-    passwordTextController.clear();
+    //passwordTextController.clear();
   }
 
   void login() async {
-    User user = await repository.login(
+    UserModel user = await repository.loginWithEmail(
         emailTextController.text, passwordTextController.text);
 
     if (user != null) {
-      Profile profile = await profileRepository.getFirstUserProfile(user.id);
-      data.write("userId", user.id);
-      data.write("profileId", profile.id);
-      data.write("user", user.toMap());
+      data.write("user", user.toJson());
       Get.offNamed(Routes.HOME);
     } else {
       Get.defaultDialog(
           title: 'Ops..', content: Text('Email e/ou senha incorretos'));
     }
-  }*/
+  }
 }

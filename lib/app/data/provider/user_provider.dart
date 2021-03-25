@@ -30,12 +30,12 @@ class UserApiClient {
     return md5.convert(utf8.encode(password)).toString();
   }
 
-  Future<bool> changePassword(
+  Future<int> changePassword(
       {String oldPassword, String email, String newPassword}) async {
     var users = await getUsers();
     if (users == null) {
       //sem usuarios cadastrados
-      return false;
+      return 0;
     } else {
       for (var user in users) {
         if (user.email == email) {
@@ -46,17 +46,17 @@ class UserApiClient {
             user.password = newPassword;
             var userResponse = await updateUser(user: user);
             if (userResponse != null) {
-              return true; //senha alterada com sucesso
+              return 1; //senha alterada com sucesso
             } else {
-              return false; //senha nao alterada
+              return 0; //senha nao alterada
             }
           } else {
-            return false;
+            return 2;
             //senhas nao coincidem
           }
         }
       }
-      return false;
+      return 3; //email n encontrado
     }
   }
 

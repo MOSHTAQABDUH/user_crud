@@ -23,13 +23,27 @@ class LoginController extends GetxController {
   }
 
   void changePassword() async {
-    bool sucess = await repository.changePassword(
+    int sucess = await repository.changePassword(
         email: emailTextController.text,
         newPassword: passwordTextController.text,
         oldPassword: oldPasswordTextController.text);
-    if (sucess) {
-      Get.defaultDialog(
-          title: 'Sucesso', content: Text('Senha alterado com sucesso!'));
+    switch (sucess) {
+      case 0:
+        Get.defaultDialog(
+            title: 'Ops', content: Text('Não foi possivel alterar sua senha'));
+        break;
+      case 1:
+        Get.defaultDialog(
+            title: 'Sucesso', content: Text('Senha alterado com sucesso!'));
+        break;
+      case 2:
+        Get.defaultDialog(
+            title: 'Ops', content: Text('Senha anterior nao coincide'));
+        break;
+      case 3:
+        Get.defaultDialog(title: 'Ops', content: Text('Email nao encontrado'));
+        break;
+      default:
     }
   }
 

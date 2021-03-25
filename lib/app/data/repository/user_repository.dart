@@ -11,6 +11,15 @@ class UserRepository {
     return apiClient.createUser(user: user);
   }
 
+  changePassword({String oldPassword, String email, String newPassword}) {
+    return apiClient.changePassword(
+        email: email, oldPassword: oldPassword, newPassword: newPassword);
+  }
+
+  updateUser(user) {
+    return apiClient.updateUser(user: user);
+  }
+
   deleteUser(id) {
     return apiClient.deleteUser(id);
   }

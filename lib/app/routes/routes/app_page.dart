@@ -1,9 +1,9 @@
-import 'package:user_crud/app/modules/home/bindings/home_bindings.dart';
-import 'package:user_crud/app/modules/home/views/home_page.dart';
-import 'package:user_crud/app/modules/login/bindings/login_binding.dart';
-import 'package:user_crud/app/modules/login/views/login_page.dart';
-import 'package:user_crud/app/modules/singup/bindings/signup_binding.dart';
-import 'package:user_crud/app/modules/singup/views/signup_page.dart';
+import 'package:user_crud/app/modules/home/home_bindings.dart';
+import 'package:user_crud/app/modules/home/home_page.dart';
+import 'package:user_crud/app/modules/login/login_binding.dart';
+import 'package:user_crud/app/modules/login/login_page.dart';
+import 'package:user_crud/app/modules/singup/signup_binding.dart';
+import 'package:user_crud/app/modules/singup/signup_page.dart';
 import 'package:user_crud/app/routes/routes/app_routes.dart';
 import 'package:get/get_navigation/src/routes/get_route.dart';
 

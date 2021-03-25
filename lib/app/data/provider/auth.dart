@@ -18,7 +18,7 @@ class AuthController extends GetxService {
 
     myUser(UserModel());
     isLogged(false);
-    Get.toNamed(Routes.LOGIN);
+    Get.offNamedUntil(Routes.LOGIN, (_) => false);
   }
 
   void setPersistence({
@@ -37,7 +37,7 @@ class AuthController extends GetxService {
   }
 
   Future<void> getHash() async {
-    hash = await box.read("hash");
+    hash(await box.read("hash"));
   }
 
   Future<void> setHash(String _hash) async {

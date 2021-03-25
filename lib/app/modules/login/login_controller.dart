@@ -8,28 +8,29 @@ import 'package:user_crud/app/routes/routes/app_routes.dart';
 class LoginController extends GetxController {
   final TextEditingController emailTextController = TextEditingController();
   final TextEditingController passwordTextController = TextEditingController();
-  final TextEditingController password2TextController = TextEditingController();
-  final TextEditingController nameTextController = TextEditingController();
-  var dateS = ''.obs;
-  DateTime date = DateTime.now();
+  final TextEditingController oldPasswordTextController =
+      TextEditingController();
+  final TextEditingController passwordConfirmationTextController =
+      TextEditingController();
+
   final data = GetStorage();
 
   final UserRepository repository = UserRepository();
 
-  void register() async {
-    UserModel user = await repository.createUser(UserModel(
-        birthDate: date,
-        email: emailTextController.text,
-        password: passwordTextController.text,
-        name: nameTextController.text));
+  void clearControllers() {
+    emailTextController.clear();
+    passwordTextController.clear();
+  }
 
-    if (user != null) {
-      Get.defaultDialog(title: 'Sucesso', content: Text('Usuario cadastrado'));
-      Get.offAllNamed(Routes.LOGIN);
-    } else {
-      Get.defaultDialog(title: 'Ops..', content: Text('Email já cadastrado'));
+  void changePassword() async {
+    bool sucess = await repository.changePassword(
+        email: emailTextController.text,
+        newPassword: passwordTextController.text,
+        oldPassword: oldPasswordTextController.text);
+    if (sucess) {
+      Get.defaultDialog(
+          title: 'Sucesso', content: Text('Senha alterado com sucesso!'));
     }
-    //passwordTextController.clear();
   }
 
   void login() async {
@@ -38,6 +39,7 @@ class LoginController extends GetxController {
 
     if (user != null) {
       data.write("user", user.toJson());
+      clearControllers();
       Get.offNamed(Routes.HOME);
     } else {
       Get.defaultDialog(

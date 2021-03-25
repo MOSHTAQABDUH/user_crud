@@ -14,8 +14,8 @@ final ThemeData appThemeData = ThemeData(
       color: Colors.lightBlue,
       textTheme: TextTheme(
         headline6:
-            TextStyle(color: Colors.black, fontSize: 20, fontFamily: 'roboto'),
-        subtitle1: TextStyle(color: Colors.black),
-        bodyText1: TextStyle(color: Colors.black),
+            TextStyle(color: Colors.white, fontSize: 20, fontFamily: 'roboto'),
+        subtitle1: TextStyle(color: Colors.white),
+        bodyText1: TextStyle(color: Colors.white),
       ),
     ));

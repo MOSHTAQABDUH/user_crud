@@ -7,7 +7,14 @@ class HomeController extends GetxController {
 
   var usersList = <UserModel>[].obs;
 
-  Future<bool> deleteUser(String id) {}
+  Future<bool> deleteUser(int index) async {
+    bool deletedSucess = await repository.deleteUser(usersList[index].id);
+    if (deletedSucess) {
+      usersList.removeAt(index);
+      return true;
+    } else
+      return false;
+  }
 
   @override
   void onInit() async {

@@ -18,7 +18,7 @@ void main() async {
       Locale("pt", "BR"),
     ],
     title: 'CRUD Usuários',
-    debugShowCheckedModeBanner: true,
+    debugShowCheckedModeBanner: false,
     getPages: AppPages.routes,
     initialRoute: Routes.LOGIN,
     theme: appThemeData,

@@ -6,33 +6,87 @@ import 'package:user_crud/app/data/model/user_model.dart';
 
 import 'package:user_crud/app/data/provider/auth.dart';
 import 'package:get/get.dart' as Get;
+import 'package:user_crud/app/global/constants.dart';
 
 class UserApiClient {
   AuthController auth = Get.Get.put(AuthController());
 
   Future<List<UserModel>> getUsers() async {
     try {
-      print("https://crudcrud.com/api/${auth.hash}/usuarios");
       print(auth.hash);
-      Response response =
-          await Dio().get("https://crudcrud.com/api/${auth.hash}/usuarios");
+      Response response = await Dio().get(BASEURL + "${auth.hash}/usuarios");
       print(response);
-
-      return UserModel.fromJsonList(response.data);
+      if (response.data.length != 0) {
+        return UserModel.fromJsonList(response.data);
+      } else
+        return null;
     } catch (e) {
       print(e);
       return null;
     }
   }
 
+  String getMd5(String password) {
+    return md5.convert(utf8.encode(password)).toString();
+  }
+
+  Future<bool> changePassword(
+      {String oldPassword, String email, String newPassword}) async {
+    var users = await getUsers();
+    if (users == null) {
+      //sem usuarios cadastrados
+      return false;
+    } else {
+      for (var user in users) {
+        if (user.email == email) {
+          //emails coincidem
+          print(getMd5(oldPassword));
+          if (user.password == getMd5(oldPassword)) {
+            //senhas coincidem
+            user.password = newPassword;
+            var userResponse = await updateUser(user: user);
+            if (userResponse != null) {
+              return true; //senha alterada com sucesso
+            } else {
+              return false; //senha nao alterada
+            }
+          } else {
+            return false;
+            //senhas nao coincidem
+          }
+        }
+      }
+      return false;
+    }
+  }
+
   Future<UserModel> createUser({UserModel user}) async {
     try {
-      print("https://crudcrud.com/api/${auth.hash}/usuarios");
+      print(auth.hash);
+      Map<String, dynamic> data = user.toJsonWithoutId();
+
+      Response response =
+          await Dio().post(BASEURL + "${auth.hash}/usuarios", data: data);
+
+      print(response);
+
+      if (response.data.length != 0) {
+        return UserModel.fromJson(response.data);
+      } else
+        return null;
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
+  Future<UserModel> updateUser({UserModel user}) async {
+    try {
       print(auth.hash);
       Map<String, dynamic> data = user.toJsonWithoutId();
 
       Response response = await Dio()
-          .post("https://crudcrud.com/api/${auth.hash}/usuarios", data: data);
+          .put(BASEURL + "${auth.hash}/usuarios/${user.id}", data: data);
 
       print(response);
 
@@ -47,7 +101,7 @@ class UserApiClient {
     try {
       print(auth.hash);
       Response response = await Dio().delete(
-        "https://crudcrud.com/api/${auth.hash}/usuarios/$id",
+        BASEURL + "${auth.hash}/usuarios/$id",
       );
       print(response);
 
@@ -59,21 +113,27 @@ class UserApiClient {
   }
 
   Future<bool> emailExist(String _email) async {
-    bool exist = false;
-    return getUsers().then((users) {
-      users.forEach((user) {
+    var users = await getUsers();
+    if (users == null) {
+      return false;
+    } else {
+      for (var user in users) {
         if (user.email == _email) {
-          exist = true;
+          return true;
         }
-      });
-    }).then((_) => exist);
+      }
+      return false;
+    }
   }
 
   Future<UserModel> loginWithEmail(String _email, String _senha) async {
-    String md5senha = md5.convert(utf8.encode(_senha)).toString();
+    String md5senha = getMd5(_senha);
     UserModel _myUser = UserModel();
-    return getUsers().then((users) {
-      users.forEach((user) {
+    var users = await getUsers();
+    if (users == null) {
+      return null;
+    } else {
+      for (var user in users) {
         if (user.email == _email) {
           if (user.password == md5senha) {
             //RECUPERAR HASH
@@ -83,9 +143,11 @@ class UserApiClient {
             //SETAR DADOS NO AUTH
             auth.setPersistence(user: user);
             _myUser = user;
+            return _myUser;
           }
         }
-      });
-    }).then((_) => _myUser);
+      }
+      return null;
+    }
   }
 }
